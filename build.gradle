@@ -1,0 +1,47 @@
+group 'umbrella'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'groovy'
+
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url 'https://plugins.gradle.org/m2/'
+    }
+}
+
+dependencies {
+    compile(
+        'org.codehaus.groovy:groovy-all:2.3.11',
+        'com.github.docker-java:docker-java:3.1.2',
+        'de.gesellix:docker-client:2019-03-26T11-38-01',
+        'org.slf4j:slf4j-simple:1.7.26'
+    )
+    testCompile(
+        'org.codehaus.groovy:groovy-all:2.4.11',
+        'org.spockframework:spock-core:1.1-groovy-2.4',
+        'de.gesellix:docker-client:2019-03-26T11-38-01',
+        'org.slf4j:slf4j-simple:1.7.26'
+    )
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src', 'vars'] 
+        }
+    }
+    test {
+        groovy {
+            srcDir 'test'
+        }
+    }
+}
+
+task getDeps(type: Copy) {
+  from sourceSets.main.runtimeClasspath
+  into 'src/libs/'
+}
